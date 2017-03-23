@@ -1,0 +1,26 @@
+AllCops:
+  Include:
+    - '**/config.ru'
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'bundle_bin/*'
+    - 'bin/*'
+    - 'spec/*'
+    - 'test/*'
+AsciiComments:
+  Enabled: false # 日本語のコメントを許可
+Documentation:
+  Enabled: false # クラスにコメントを残さない
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+MethodLength:
+  CountComments: true
+  Max: 15
+Metrics/AbcSize:
+  Max: 20
