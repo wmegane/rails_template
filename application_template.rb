@@ -150,7 +150,7 @@ Metrics/AbcSize:
 # dotfiles
 # ----------------------------------------------------------------
 # .pryrc
-pryrc_file = open('https://gist.githubusercontent.com/yhara/606476/raw/ee78111c9c352711fcdad07459c4ad7851f9b09d/devise.ja.yml')
+pryrc_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/pryrc')
 create_file '.pryrc', pryrc_file.read
 
 # dotenv-rails
