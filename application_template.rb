@@ -176,7 +176,8 @@ remove_file 'README.rdoc'
 run 'bundle exec spring binstub --all'
 
 # DB migration
-rake 'db:migrate'
+# docker使うのでいったんコメントアウトアウト
+# rake 'db:migrate'
 
 # annotate 設定ファイルの作成
 run 'bundle exec rails g annotate:install'

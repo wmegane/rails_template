@@ -19,4 +19,4 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV.fetch['RDS_DB_NAME'] %>
+  database: <%= ENV['RDS_DB_NAME'] %>
