@@ -116,6 +116,14 @@ inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
   end
 RUBY
 
+# Dockerfile
+docker_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Dockerfile')
+create_file 'Dockerfile', docker_file.read
+
+# docker-compose.yml
+docker_compose = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/docker-compose.yml')
+create_file 'docker-compose.yml', docker_compose.read
+
 # Guard/Rubocop
 # ----------------------------------------------------------------
 # Guardfile
