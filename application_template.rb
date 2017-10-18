@@ -66,6 +66,17 @@ end
 # run 'bundle install --path vendor/bundler --without production'
 run 'bundle install --without production'
 
+
+# devise
+if yes? 'use devise?(yes/no)'
+  generate 'devise:install'
+
+  model_name = ask("What would you like the user model to be called? [user]")
+  model_name = "user" if model_name.blank?
+  generate "devise", model_name
+  rake 'db:migrate'
+end
+
 # config
 # ----------------------------------------------------------------
 # locales
@@ -161,14 +172,6 @@ run 'bundle exec rails g annotate:install'
 run 'gibo OSX Ruby Rails JetBrains SublimeText > .gitignore' rescue nil
 gsub_file '.gitignore', /^config\/initializers\/secret_token.rb$/, ''
 gsub_file '.gitignore', /config\/secret.yml/, ''
-
-cert_ignore = <<-EOS
-# Ignore certificate file
-/certs/*
-!/certs/.keep
-EOS
-
-append_file '.gitignore', cert_ignore
 
 after_bundle do
   git :init
