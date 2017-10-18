@@ -96,6 +96,11 @@ application do
   }
 end
 
+# config/database.yml
+remove_file 'config/database.yml'
+database_setting_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/database.yml')
+create_file 'config/database.yml', database_setting_file.read
+
 # config/environments/development.rb
 # inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.assets.debug = true'
 # ここに改行を入れること!!
@@ -142,6 +147,9 @@ create_file '.pryrc', pryrc_file.read
 # dotenv-rails
 env_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/env')
 create_file '.env', env_file.read
+
+# insert app name to .env
+prepend_file '.env', "APP_NAME=#{app_name}"
 
 # Capistrano
 # ----------------------------------------------------------------

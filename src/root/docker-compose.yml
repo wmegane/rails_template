@@ -9,12 +9,7 @@ services:
       - ./db/mysql_data:/var/lib/mysql
   app:
     build: .
-    environment:
-      APP_NAME:
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD: "root"
-      DATABASE_HOST: db
-      DATABASE_SOCKET: /var/run/mysqld/mysqld.sock
+    env_file: .env
   web:
     extends:
       service: app
