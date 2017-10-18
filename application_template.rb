@@ -11,7 +11,6 @@ puts txt
 
 # Gemfile
 # ----------------------------------------------------------------
-gem 'mysql2'
 gem 'devise'
 gem 'sidekiq'
 gem 'whenever', require: false

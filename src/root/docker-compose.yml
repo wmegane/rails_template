@@ -10,6 +10,7 @@ services:
   app:
     build: .
     environment:
+      APP_NAME:
       DATABASE_USERNAME: root
       DATABASE_PASSWORD: "root"
       DATABASE_HOST: db
