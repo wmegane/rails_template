@@ -161,6 +161,14 @@ run 'gibo OSX Ruby Rails JetBrains SublimeText > .gitignore' rescue nil
 gsub_file '.gitignore', /^config\/initializers\/secret_token.rb$/, ''
 gsub_file '.gitignore', /config\/secret.yml/, ''
 
+cert_ignore = <<-EOS
+# Ignore certificate file
+/certs/*
+!/certs/.keep
+EOS
+
+append_file '.gitignore', cert_ignore
+
 after_bundle do
   git :init
   git add: "."
