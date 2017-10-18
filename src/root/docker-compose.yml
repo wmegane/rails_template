@@ -1,12 +1,7 @@
 version: '2'
 services:
   db:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: "root"
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --innodb-ft-min-token-size=2
-    volumes:
-      - ./db/mysql_data:/var/lib/mysql
+    image: postgres
   app:
     build: .
     env_file: .env

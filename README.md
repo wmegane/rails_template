@@ -6,7 +6,11 @@ $ brew install gibo
 ```
 
 ```
+# mysql
 $ rails new myapp -m https://raw.githubusercontent.com/wmegane/rails_template/master/application_template.rb --force --database=mysql
+
+# postgresql
+$ rails new myapp -m https://raw.githubusercontent.com/wmegane/rails_template/master/application_template.rb --force --database=postgresql
 ```
 
 ## Supported versions

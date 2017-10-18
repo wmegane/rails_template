@@ -1,4 +1,2 @@
-DATABASE_USERNAME=root
-DATABASE_PASSWORD="root"
+DATABASE_USERNAME=postgres
 DATABASE_HOST=db
-DATABASE_SOCKET=/var/run/mysqld/mysqld.sock
