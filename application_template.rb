@@ -11,8 +11,55 @@ puts txt
 
 # Gemfile
 # ----------------------------------------------------------------
-gemfile_source = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Gemfile')
-gemfile_source.read
+gem 'devise'
+gem 'sidekiq'
+gem 'whenever', require: false
+gem 'active_decorator'
+gem 'rollbar'
+
+gem_group :development do
+  gem 'guard'
+  gem 'guard-rubocop'
+  gem 'guard-livereload', require: false # ソースを修正するとブラウザが自動でロードされ、画面を作るときに便利
+  gem 'rails-erd'                        # rake-erdコマンドでActiveRecordからER図を作成できる
+  gem 'bullet'                           # n+1問題を発見
+  gem 'annotate'                         # Add a comment summarizing the current schema
+  gem 'view_source_map'
+  # Capistrano
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-rails-console'
+  gem 'capistrano3-nginx'
+  gem 'capistrano3-puma'
+  gem 'capistrano-bundler'
+  gem 'slackistrano'
+end
+
+gem_group :development, :test do
+  gem 'dotenv-rails'
+  gem 'letter_opener'
+
+  # pry関連
+  gem 'pry-rails'          # rails cの対話式コンソールがirbの代わりにリッチなpryになる
+  gem 'pry-doc'            # pry中に show-source [method名] でソース内を読める
+  gem 'pry-byebug'         # binding.pryをソースに記載すると、ブレイクポイントとなりデバッグが可能になる
+  gem 'pry-stack_explorer' # pry中にスタックを上がったり下がったり行き来できる
+
+  # エラー処理
+  gem 'better_errors'     # 開発中のエラー画面をリッチにする
+  gem 'binding_of_caller' # 開発中のエラー画面にさらに変数の値を表示する
+
+  # コンソール表示整形
+  gem 'hirb'              # モデルの出力結果を表形式で表示する
+  gem 'hirb-unicode'      # hirbの日本語などマルチバイト文字の出力時の出力結果がすれる問題に対応
+  gem 'awesome_print'     # Rubyオブジェクトに色をつけて表示して見やすくなる
+
+  # テスト関連
+  gem 'rspec-rails'        # rspec本体
+  gem 'factory_girl_rails' # テストデータ作成
+  gem 'faker'              # 本物っぽいテストデータの作成
+  gem 'faker-japanese'     # 本物っぽいテストデータの作成（日本語対応）
+end
 
 
 # run 'bundle install --path vendor/bundler --without production'
@@ -39,7 +86,13 @@ application do
 end
 
 # config/environments/development.rb
+# inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.assets.debug = true'
+# ここに改行を入れること!!
+# config.action_mailer...........
+# end
+# RUBY
 inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.assets.debug = true'
+
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
   config.action_mailer.delivery_method = :letter_opener
   config.after_initialize do
