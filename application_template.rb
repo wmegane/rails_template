@@ -149,7 +149,7 @@ env_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master
 create_file '.env', env_file.read
 
 # insert app name to .env
-prepend_file '.env', "APP_NAME=#{app_name}"
+prepend_file '.env', "APP_NAME=#{app_name}\n"
 
 # Capistrano
 # ----------------------------------------------------------------
