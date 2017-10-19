@@ -87,9 +87,7 @@ if yes? 'use activeadmin?(yes/no)'
     end
   CODE
 
-  additional_model_name = ask("What would you like the model to be handled apart from [#{model_name}]?")
   generate "active_admin:resource", model_name unless model_name.blank?
-  generate "active_admin:resource", additional_model_name unless additional_model_name.blank?
 end
 
 # config
