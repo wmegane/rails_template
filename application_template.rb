@@ -16,6 +16,7 @@ gem 'sidekiq'
 gem 'whenever', require: false
 gem 'active_decorator'
 gem 'rollbar'
+gem 'activeadmin'
 
 gem_group :development do
   gem 'guard'
@@ -73,6 +74,21 @@ if yes? 'use devise?(yes/no)'
   model_name = ask("What would you like the user model to be called? [user]")
   model_name = "user" if model_name.blank?
   generate "devise", model_name
+end
+
+# activeadmin
+if yes? 'use activeadmin?(yes/no)'
+  generate 'active_admin:install'
+
+  # 新規項目作成時のエラー回避のため作成（https://github.com/Prelang/feedback/issues/14）
+  file 'app/inputs/inet_input.rb',
+  <<~CODE
+    class InetInput < Formtastic::Inputs::StringInput
+    end
+  CODE
+
+  model_name = ask("What would you like the user model to be called?")
+  generate "active_admin:resource", model_name unless model_name.blank?
 end
 
 # config
