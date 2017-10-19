@@ -181,6 +181,12 @@ run 'bundle exec spring binstub --all'
 # annotate 設定ファイルの作成
 run 'bundle exec rails g annotate:install'
 
+# githubのissue,PRのテンプレートファイル
+issues_template_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/ISSUE_TEMPLATE.md')
+create_file '.github/ISSUE_TEMPLATE.md', issues_template_file.read
+
+pr_template_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/PULL_REQUEST_TEMPLATE.md')
+create_file '.github/PULL_REQUEST_TEMPLATE.md', pr_template_file.read
 
 # git
 # ----------------------------------------------------------------
