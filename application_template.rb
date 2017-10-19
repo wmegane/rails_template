@@ -1,13 +1,14 @@
-require 'open-uri'
-
-txt = <<-TXT
+opening_txt = <<-TXT
 
   ＿人人人人人人人人人人人人人人人人人人人人人人人人人人＿
   ＞　Double Megane Rails Application Template　＜
   ￣Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^YY￣
 
 TXT
-puts txt
+puts opening_txt
+
+require 'open-uri'
+end_point = 'https://raw.githubusercontent.com/wmegane/rails_template/master'
 
 # Gemfile
 # ----------------------------------------------------------------
@@ -69,6 +70,7 @@ run 'bundle install --without production'
 # devise
 if yes? 'use devise?(yes/no)'
   generate 'devise:install'
+  run 'wget https://gist.githubusercontent.com/kaorumori/7276cec9c2d15940a3d93c6fcfab19f3/raw/a8c4f854988391dd345f04ff100441884c324f2a/devise.ja.yml -P config/locales/'
 
   model_name = ask("What would you like the user model to be called? [user]")
   model_name = "user" if model_name.blank?
@@ -81,7 +83,6 @@ end
 remove_file 'config/locales/en.yml'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/en.yml -P config/locales/'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -P config/locales/'
-run 'wget https://gist.githubusercontent.com/kaorumori/7276cec9c2d15940a3d93c6fcfab19f3/raw/a8c4f854988391dd345f04ff100441884c324f2a/devise.ja.yml -P config/locales/'
 
 # config/application.rb
 application do
