@@ -181,6 +181,7 @@ run 'bundle exec spring binstub --all'
 # annotate 設定ファイルの作成
 run 'bundle exec rails g annotate:install'
 
+
 # git
 # ----------------------------------------------------------------
 # .gitignore
