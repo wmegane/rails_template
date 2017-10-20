@@ -10,6 +10,11 @@ puts opening_txt
 require 'open-uri'
 end_point = 'https://raw.githubusercontent.com/wmegane/rails_template/master'
 
+# ソースファイルのパスを設定
+def source_paths
+  [File.expand_path(File.dirname(__FILE__))]
+end
+
 # Gemfile
 # ----------------------------------------------------------------
 gem 'devise'
@@ -73,9 +78,12 @@ if yes? 'use devise?(yes/no)'
   generate 'devise:install'
   run 'wget https://gist.githubusercontent.com/kaorumori/7276cec9c2d15940a3d93c6fcfab19f3/raw/a8c4f854988391dd345f04ff100441884c324f2a/devise.ja.yml -P config/locales/'
 
+  copy_file 'src/root/application.html.erb', 'app/views/layouts/application.html.erb'
+
   model_name = ask("What would you like the user model to be called? [user]")
   model_name = "user" if model_name.blank?
   generate "devise", model_name
+  generate "devise:views", model_name
 end
 
 # activeadmin
@@ -148,6 +156,11 @@ inject_into_file 'config/routes.rb', <<RUBY, after: 'Rails.application.routes.dr
   end
 RUBY
 
+# test
+# ----------------------------------------------------------------
+# test/fixtures/user.yml
+copy_file 'src/root/user.yml', 'test/fixtures/user.yml'
+
 # Dockerfile
 docker_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Dockerfile')
 create_file 'Dockerfile', docker_file.read
@@ -204,6 +217,10 @@ inject_into_file 'Capfile', <<RUBY, after: 'Dir.glob("lib/capistrano/tasks/*.rak
   require 'slackistrano/capistrano'
 RUBY
 
+# CircleCI
+# ----------------------------------------------------------------
+copy_file 'src/root/config.yml', '.circleci/config.yml'
+
 # misc
 # ----------------------------------------------------------------
 # remove files
@@ -218,6 +235,10 @@ run 'bundle exec spring binstub --all'
 
 # annotate 設定ファイルの作成
 run 'bundle exec rails g annotate:install'
+
+# githubのissue,PRのテンプレートファイル
+copy_file 'src/root/ISSUE_TEMPLATE.md', '.github/ISSUE_TEMPLATE.md'
+copy_file 'src/root/PULL_REQUEST_TEMPLATE.md', '.github/PULL_REQUEST_TEMPLATE.md'
 
 # git
 # ----------------------------------------------------------------
