@@ -1,3 +1,7 @@
 DATABASE_USERNAME=postgres
 DATABASE_HOST=db
+
 REDIS_URL=redis://redis:6379
+
+SIDEKIQ_USER=sidekiquser
+SIDEKIQ_PASSWORD=password
