@@ -9,6 +9,11 @@ txt = <<-TXT
 TXT
 puts txt
 
+# ソースファイルのパスを設定
+def source_paths
+  [File.expand_path(File.dirname(__FILE__))]
+end
+
 # Gemfile
 # ----------------------------------------------------------------
 gem 'devise'
@@ -70,9 +75,12 @@ run 'bundle install --without production'
 if yes? 'use devise?(yes/no)'
   generate 'devise:install'
 
+  copy_file 'src/root/application.html.erb', 'app/views/layouts/application.html.erb'
+
   model_name = ask("What would you like the user model to be called? [user]")
   model_name = "user" if model_name.blank?
   generate "devise", model_name
+  generate "devise:views", model_name
 end
 
 # config
@@ -118,6 +126,11 @@ inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
     Bullet.rails_logger = true
   end
 RUBY
+
+# test
+# ----------------------------------------------------------------
+# test/fixtures/user.yml
+copy_file 'src/root/user.yml', 'test/fixtures/user.yml'
 
 # Dockerfile
 docker_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Dockerfile')
@@ -168,8 +181,7 @@ RUBY
 
 # CircleCI
 # ----------------------------------------------------------------
-circleci_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/config.yml')
-create_file '.circleci/config.yml', circleci_file.read
+copy_file 'src/root/config.yml', '.circleci/config.yml'
 
 # misc
 # ----------------------------------------------------------------
@@ -187,11 +199,8 @@ run 'bundle exec spring binstub --all'
 run 'bundle exec rails g annotate:install'
 
 # githubのissue,PRのテンプレートファイル
-issues_template_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/ISSUE_TEMPLATE.md')
-create_file '.github/ISSUE_TEMPLATE.md', issues_template_file.read
-
-pr_template_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/PULL_REQUEST_TEMPLATE.md')
-create_file '.github/PULL_REQUEST_TEMPLATE.md', pr_template_file.read
+copy_file 'src/root/ISSUE_TEMPLATE.md', '.github/ISSUE_TEMPLATE.md'
+copy_file 'src/root/PULL_REQUEST_TEMPLATE.md', '.github/PULL_REQUEST_TEMPLATE.md'
 
 # git
 # ----------------------------------------------------------------
