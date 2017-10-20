@@ -120,6 +120,20 @@ inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
   end
 RUBY
 
+inject_into_file 'config/routes.rb', <<RUBY, after: 'Rails.application.routes.draw do'
+
+  if Rails.env.production?
+    constraints subdomain: "#{ENV['SIDEKIQ_SUBDOMAIN']}" do
+      require 'sidekiq/web'
+      mount Sidekiq::Web => '/sidekiq'
+    end
+  else
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+RUBY
+
 # Dockerfile
 docker_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Dockerfile')
 create_file 'Dockerfile', docker_file.read
@@ -147,6 +161,15 @@ create_file '.pryrc', pryrc_file.read
 # dotenv-rails
 env_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/env')
 create_file '.env', env_file.read
+
+# sidekiq_config
+sidekiq_initializer = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/sidekiq.rb')
+create_file 'config/initializers/sidekiq.rb', sidekiq_initializer.read
+
+sidekiq_yml = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/sidekiq.yml')
+create_file 'config/sidekiq.yml', sidekiq_yml.read
+
+
 
 # insert app name to .env
 prepend_file '.env', "APP_NAME=#{app_name}\n"
