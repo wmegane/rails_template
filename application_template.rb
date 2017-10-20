@@ -1,13 +1,14 @@
-require 'open-uri'
-
-txt = <<-TXT
+opening_txt = <<-TXT
 
   ＿人人人人人人人人人人人人人人人人人人人人人人人人人人＿
   ＞　Double Megane Rails Application Template　＜
   ￣Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^YY￣
 
 TXT
-puts txt
+puts opening_txt
+
+require 'open-uri'
+end_point = 'https://raw.githubusercontent.com/wmegane/rails_template/master'
 
 # ソースファイルのパスを設定
 def source_paths
@@ -74,6 +75,7 @@ run 'bundle install --without production'
 # devise
 if yes? 'use devise?(yes/no)'
   generate 'devise:install'
+  run 'wget https://gist.githubusercontent.com/kaorumori/7276cec9c2d15940a3d93c6fcfab19f3/raw/a8c4f854988391dd345f04ff100441884c324f2a/devise.ja.yml -P config/locales/'
 
   copy_file 'src/root/application.html.erb', 'app/views/layouts/application.html.erb'
 
@@ -89,7 +91,6 @@ end
 remove_file 'config/locales/en.yml'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/en.yml -P config/locales/'
 run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -P config/locales/'
-run 'wget https://gist.githubusercontent.com/kaorumori/7276cec9c2d15940a3d93c6fcfab19f3/raw/a8c4f854988391dd345f04ff100441884c324f2a/devise.ja.yml -P config/locales/'
 
 # config/application.rb
 application do
@@ -127,10 +128,18 @@ inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
   end
 RUBY
 
-# test
-# ----------------------------------------------------------------
-# test/fixtures/user.yml
-copy_file 'src/root/user.yml', 'test/fixtures/user.yml'
+inject_into_file 'config/routes.rb', <<RUBY, after: 'Rails.application.routes.draw do'
+
+  if Rails.env.production?
+    constraints subdomain: "#{ENV['SIDEKIQ_SUBDOMAIN']}" do
+      require 'sidekiq/web'
+      mount Sidekiq::Web => '/sidekiq'
+    end
+  else
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
+RUBY
 
 # Dockerfile
 docker_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Dockerfile')
@@ -159,6 +168,15 @@ create_file '.pryrc', pryrc_file.read
 # dotenv-rails
 env_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/env')
 create_file '.env', env_file.read
+
+# sidekiq_config
+sidekiq_initializer = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/sidekiq.rb')
+create_file 'config/initializers/sidekiq.rb', sidekiq_initializer.read
+
+sidekiq_yml = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/sidekiq.yml')
+create_file 'config/sidekiq.yml', sidekiq_yml.read
+
+
 
 # insert app name to .env
 prepend_file '.env', "APP_NAME=#{app_name}\n"

@@ -2,6 +2,8 @@ version: '2'
 services:
   db:
     image: postgres
+  redis:
+    image: redis
   app:
     build: .
     env_file: .env
@@ -15,5 +17,15 @@ services:
       - "3000:3000"
     links:
       - db
+      - redis
     tty: true
     stdin_open: true
+  job:
+    extends:
+      service: app
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - .:/myapp
+    links:
+      - db
+      - redis
