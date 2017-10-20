@@ -131,7 +131,6 @@ inject_into_file 'config/routes.rb', <<RUBY, after: 'Rails.application.routes.dr
     require 'sidekiq/web'
     mount Sidekiq::Web => '/sidekiq'
   end
-
 RUBY
 
 # Dockerfile
