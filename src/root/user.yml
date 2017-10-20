@@ -1,4 +1,3 @@
 sample_user:
   email: "test@sample.jp"
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
-  

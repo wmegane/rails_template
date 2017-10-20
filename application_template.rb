@@ -141,6 +141,11 @@ inject_into_file 'config/routes.rb', <<RUBY, after: 'Rails.application.routes.dr
   end
 RUBY
 
+# test
+# ----------------------------------------------------------------
+# test/fixtures/user.yml
+copy_file 'src/root/user.yml', 'test/fixtures/user.yml'
+
 # Dockerfile
 docker_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/Dockerfile')
 create_file 'Dockerfile', docker_file.read
