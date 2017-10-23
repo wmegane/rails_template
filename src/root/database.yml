@@ -14,6 +14,10 @@ test:
   <<: *default
   database: <%= "#{ENV.fetch('APP_NAME')}_test" %>
 
+staging:
+  <<: *default
+  database: <%= "#{ENV.fetch('APP_NAME')}_staging" %>
+
 production:
   <<: *default
   database: <%= ENV['RDS_DB_NAME'] %>

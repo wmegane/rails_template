@@ -8,6 +8,7 @@ TXT
 puts opening_txt
 
 require 'open-uri'
+require "fileutils"
 end_point = 'https://raw.githubusercontent.com/wmegane/rails_template/master'
 
 # ソースファイルのパスを設定
@@ -124,6 +125,13 @@ remove_file 'config/database.yml'
 database_setting_file = open('https://raw.githubusercontent.com/wmegane/rails_template/master/src/root/database.yml')
 create_file 'config/database.yml', database_setting_file.read
 
+# config/secrets.yml
+inject_into_file 'config/secrets.yml', <<RUBY, before: '# Do not keep production secrets in the unencrypted secrets file.'
+staging:
+  secret_key_base: <%= ENV["STAGING_SECRET_KEY_BASE"] %>
+
+RUBY
+
 # config/environments/development.rb
 # inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.assets.debug = true'
 # ここに改行を入れること!!
@@ -142,6 +150,9 @@ inject_into_file 'config/environments/development.rb', <<RUBY, after: 'config.as
     Bullet.rails_logger = true
   end
 RUBY
+
+# config/environments/staging.rb
+FileUtils.cp("config/environments/production.rb", "config/environments/staging.rb")
 
 inject_into_file 'config/routes.rb', <<RUBY, after: 'Rails.application.routes.draw do'
 
